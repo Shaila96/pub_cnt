@@ -13,7 +13,7 @@ def setup():
 
 @task
 def test():
-  sh('nosetests --nocapture --with-coverage --cover-erase --cover-branches --cover-html --cover-package=src test/service')
+  sh('nosetests --nocapture --with-coverage --cover-erase --cover-branches --cover-html --cover-package=src test/altmetric')
   pass
 
 @task
@@ -34,10 +34,6 @@ def radon():
   sh('radon cc src -a -nb > radon.report')
   if (os.stat("radon.report").st_size != 0):
     raise Exception('radon found complex code')
-
-@task
-def run():
-  sh('python3 -m src.generator.iss_rise_time_generator')
   
 @task
 @needs(['setup', 'clean', 'test', 'radon'])
