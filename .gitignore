@@ -10,7 +10,7 @@ radon.report
 pavement.py
 setup.py
 
-
+*main.py
 pub_cnt/cover/*
 tests
 main.py
