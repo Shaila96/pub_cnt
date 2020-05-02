@@ -1,9 +1,9 @@
 import logging
-import requests
-import json
+import requests, json
 import pandas as pd
+import sys
 
-class AltmetricService():
+class Altmetric():
   def parse_data(self, data, keys):
     try:
       for key in keys:
@@ -41,18 +41,25 @@ class AltmetricService():
     else:
       return construct_url('pmid', pmid)
   
-  def get_sp_data(self, doi = None, pmid = None):
-    if not doi and not pmid:
-      logging.error('doi or pubmed id must be provided')
-      return
-    
-    response = requests.get(self.get_url(doi, pmid), headers = {'Accept': 'application/json'})
-    
-    if response.status_code == 200:
-      try:
-        json_data = json.loads(response.text.encode('utf-8'))
-      except:
-        logging.error("json data not available")
+  def get_data(self, doi = None, pmid = None):
+    try:
+      if not doi and not pmid:
+        logging.error('doi or pubmed id must be provided')
         return
       
-      return self.construct_data_frame(json_data)
+      response = requests.get(self.get_url(doi, pmid), headers = {'Accept': 'application/json'})
+      
+      if response.status_code == 200:
+        try:
+          json_data = json.loads(response.text.encode('utf-8'))
+        except:
+          logging.error("json data not available")
+          return
+        
+        return self.construct_data_frame(json_data)
+      
+      else:
+        logging.error('Response Error: %s', response.status_code)
+        
+    except:
+      logging.error('Error occurred unavailable due to %s' % sys.exc_info()[0].__name__)
