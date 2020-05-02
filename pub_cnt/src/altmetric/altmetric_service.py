@@ -16,17 +16,9 @@ class AltmetricService():
         logging.error("data not available")
         return
       
-      doi = []
-      pmid = []
-      score = []
-      
-      doi.append(json_data['doi'])
-      pmid.append(json_data['pmid'])
-      score.append(json_data['score'])
-      
-      df = pd.DataFrame({'doi': doi,
-        'pmid': pmid,
-        'score': score,
+      df = pd.DataFrame({'doi': [json_data['doi']],
+        'pmid': [json_data['pmid']],
+        'score': [json_data['score']],
       })
       
       return df
