@@ -25,7 +25,7 @@ class AltmetricService():
   
   def get_sp_data(self, doi = None, pmid = None):
     if doi:
-      self.download_data('doi', doi)
+      return self.download_data('doi', doi)
     elif pmid:
       return self.download_data('pmid', pmid)
     else:
