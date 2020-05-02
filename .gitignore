@@ -7,9 +7,13 @@ cover/*
 dist/*
 .coverage
 radon.report
+pavement.py
+setup.py
+
 
 pub_cnt/cover/*
-
+tests
+main.py
 
 
 
