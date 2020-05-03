@@ -22,13 +22,16 @@ class Altmetric():
       'pmid': get_value('pmid'),
       'published_on': get_value('published_on'),
       'score': get_value('score'),
-      'one_year_score': self.parse_data(data, ['history', '1y']),
+      'one_year_old_score': self.parse_data(data, ['history', '1y']),
       'readers_count': get_value('readers_count'),
       'cited_by_posts_count': get_value('cited_by_posts_count'),
       'cited_by_tweeters_count': get_value('cited_by_tweeters_count'),
       'cited_by_feeds_count': get_value('cited_by_feeds_count'),
       'cited_by_msm_count': get_value('cited_by_msm_count'),
       'cited_by_accounts_count': get_value('cited_by_accounts_count'),
+      'type': get_value('type'),
+      'altmetric_id': get_value('altmetric_id'),
+      'publication_url': get_value('url')
     })
     
     return df
