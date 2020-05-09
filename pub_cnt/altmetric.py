@@ -43,7 +43,7 @@ def get_url(doi, pmid):
   else:
     return construct_url('pmid', pmid)
 
-def get_data(doi = None, pmid = None):
+def get_data(doi = None, pmid = None, dois=None, pmids=None):
   try:
     if not doi and not pmid:
       logging.error('doi or pubmed id must be provided')
