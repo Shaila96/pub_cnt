@@ -49,9 +49,8 @@ def handle_user_input(doi = None, pmid = None, dois = None, pmids = None):
   
   return '', list('')
 
-def get_response():
-  return requests.get(lambda id_type, _id:
-  'https://api.altmetric.com/v1/%s/%s' % (id_type, _id),
+def get_response(id_type, _id):
+  return requests.get('https://api.altmetric.com/v1/%s/%s' % (id_type, _id),
     headers = {'Accept': 'application/json'})
 
 def get_data(doi = None, pmid = None, dois = None, pmids = None):
@@ -60,17 +59,17 @@ def get_data(doi = None, pmid = None, dois = None, pmids = None):
   
   for _id in ids:
     try:
-      response = get_response()
+      response = get_response(id_type, _id)
       
       while response.status_code == 429:
         logging.error('Rate is limited and you finished your rate')
         time.sleep(3600)
-        response = get_response()
+        response = get_response(id_type, _id)
       
       while response.status_code == 502:
         logging.error('API under maintenance')
         time.sleep(3600)
-        response = get_response()
+        response = get_response(id_type, _id)
       
       json_data = json.loads(response.text.encode('utf-8'))
     
