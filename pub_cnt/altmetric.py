@@ -1,4 +1,4 @@
-import sys, time
+import time
 import requests, json
 import pandas as pd
 import logging
@@ -10,15 +10,15 @@ def parse_data(data, keys):
   except:
     return 'Not Available'
 
-def construct_data_frame(data, _id):
+def construct_data_frame(data, id_type, _id):
   get_value = lambda field: [data[field]] if field in data.keys() else 'Not Available'
   
   df = pd.DataFrame({
-    'input_id': _id,
-    'title': get_value('title'),
-    'journal': get_value('journal'),
+    'given_' + id_type + '_id': _id,
     'doi': get_value('doi'),
     'pmid': get_value('pmid'),
+    'title': get_value('title'),
+    'journal': get_value('journal'),
     'published_on': get_value('published_on'),
     'score': get_value('score'),
     'one_year_old_score': parse_data(data, ['history', '1y']),
@@ -65,7 +65,7 @@ def get_data(doi = None, pmid = None, dois = None, pmids = None):
         response = get_response(id_type, _id)
       
       while response.status_code == 502:
-        logging.error('API under maintenance...')
+        logging.error('API under maintenance, waiting...')
         time.sleep(3600)
         response = get_response(id_type, _id)
       
@@ -73,8 +73,8 @@ def get_data(doi = None, pmid = None, dois = None, pmids = None):
     
     except:
       json_data = {}
-      logging.error('Data unavailable for %s:%s due to %s' % (id_type, _id, sys.exc_info()[0].__name__))
+      logging.error('Data unavailable for %s %s' % (id_type, _id))
     
-    result_df = result_df.append(construct_data_frame(json_data, _id))
+    result_df = result_df.append(construct_data_frame(json_data, id_type, _id))
   
   return result_df
