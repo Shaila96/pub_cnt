@@ -1,9 +1,7 @@
-import logging
+import sys, time
 import requests, json
 import pandas as pd
-import sys
-import time
-
+import logging
 from functools import reduce
 
 def parse_data(data, keys):
@@ -62,20 +60,20 @@ def get_data(doi = None, pmid = None, dois = None, pmids = None):
       response = get_response(id_type, _id)
       
       while response.status_code == 429:
-        logging.error('Rate is limited and you finished your rate')
+        logging.error('Rate is limited, waiting for renew rate...')
         time.sleep(3600)
         response = get_response(id_type, _id)
       
       while response.status_code == 502:
-        logging.error('API under maintenance')
+        logging.error('API under maintenance...')
         time.sleep(3600)
         response = get_response(id_type, _id)
       
       json_data = json.loads(response.text.encode('utf-8'))
     
     except:
-      logging.error('Data unavailable for %s:%s due to %s' % (id_type, _id, sys.exc_info()[0].__name__))
       json_data = {}
+      logging.error('Data unavailable for %s:%s due to %s' % (id_type, _id, sys.exc_info()[0].__name__))
     
     result_df = result_df.append(construct_data_frame(json_data, _id))
   
