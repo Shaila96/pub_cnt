@@ -28,7 +28,7 @@ def construct_data_frame(data, id_type, _id):
     'cited_by_feeds_count': get_value('cited_by_feeds_count'),
     'cited_by_msm_count': get_value('cited_by_msm_count'),
     'cited_by_accounts_count': get_value('cited_by_accounts_count'),
-    'type': get_value('type'),
+    'publication_type': get_value('type'),
     'altmetric_id': get_value('altmetric_id'),
     'publication_url': get_value('url')
   }, index = [0])
