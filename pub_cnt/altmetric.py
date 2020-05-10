@@ -51,6 +51,13 @@ def get_response(id_type, _id):
   return requests.get('https://api.altmetric.com/v1/%s/%s' % (id_type, _id),
     headers = {'Accept': 'application/json'})
 
+def get_reponse_error_msg(response_status_code):
+  if response_status_code == 429:
+    return 'Rate is limited, waiting for renew rate...'
+  
+  if response_status_code == 502:
+    return 'API under maintenance, waiting...'
+
 def get_data(doi = None, pmid = None, dois = None, pmids = None):
   id_type, ids = handle_user_input(doi, pmid, dois, pmids)
   result_df = pd.DataFrame({})
@@ -59,13 +66,8 @@ def get_data(doi = None, pmid = None, dois = None, pmids = None):
     try:
       response = get_response(id_type, _id)
       
-      while response.status_code == 429:
-        logging.error('Rate is limited, waiting for renew rate...')
-        time.sleep(3600)
-        response = get_response(id_type, _id)
-      
-      while response.status_code == 502:
-        logging.error('API under maintenance, waiting...')
+      while response.status_code in (429, 502):
+        logging.error(get_reponse_error_msg(response.status_code))
         time.sleep(3600)
         response = get_response(id_type, _id)
       
