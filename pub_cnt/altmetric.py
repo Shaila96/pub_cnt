@@ -4,11 +4,11 @@ import pandas as pd
 import sys
 import time
 
+from functools import reduce
+
 def parse_data(data, keys):
   try:
-    for key in keys:
-      data = data[key]
-    return [data]
+    return reduce(lambda data, key: data[key], keys, data)
   except:
     return 'Not Available'
 
@@ -44,7 +44,7 @@ def handle_user_input(doi = None, pmid = None, dois = None, pmids = None):
     return 'pmid', [str(pmid)]
   if dois:
     return 'doi', list(map(str, dois))
-  if dois:
+  if pmids:
     return 'pmid', list(map(str, pmids))
   
   return '', list('')
